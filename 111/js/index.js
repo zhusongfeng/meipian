@@ -39,4 +39,13 @@ $(function () {
          audio.pause();
      }
  });
-
+//输入框
+$('.comment-input').focus(function () {
+    $('.mp-article-foots').show();
+    $('.mp-article-foot').hide();
+});
+//点击发送
+$('.input-send').click(function () {
+    $('.mp-article-foot').show();
+    $('.mp-article-foots').hide();
+});
