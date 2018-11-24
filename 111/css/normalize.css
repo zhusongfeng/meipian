@@ -225,3 +225,4 @@ body, html {
     -webkit-overflow-scrolling: touch;
     min-height: 100%
 }
+[v-clock] { display: none; }

@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>文章预览</title>
+    <link rel="stylesheet" href="css/icon.css">
+    <link rel="stylesheet" href="css/normalize.css">
+    <link rel="stylesheet" href="css/article_details.css">
+    <link rel="stylesheet" href="css/load.css">
+    <script type="text/javascript" src="js/rem.js"></script>
+    <style>
+        .mp-article-music-migu-fixed {  display: none;  }
+        .article {  background: radial-gradient(#eeeeee, #444444) ;  }
+        .mp-article-images-item-img, .mp-article-images-item {  height: 7.44rem;  width: 6.3rem;  background-size: cover;  }
+        .hidden{  max-height: 700px;  overflow:hidden;  }
+        .aaa{margin-bottom: 0.68rem;}
+        [v-cloak]{
+            display:none;
+        }
+    </style>
+</head>
+<body  >
+
+
+<div id="app" v-cloak  class="mp-frame mp-article" :class="{article:loader}">
+    <!--加载中-->
+    <div class="loader" v-if="loader">
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+    <!--左右两侧背景图-->
+    <div class="mp-article-bgfixed repeat " id="container" >
+        <input type="hidden" id="number" value="2"  />
+        <div id="leafContainer"></div>
+    </div>
+
+
+    <!--头部-->
+    <div class="mp-article-head"></div>
+    <!--内容区域-->
+    <div class="mp-article-tpl" style="min-height: 667px;">
+        <div class="mp-article-content-container">
+            <div class="mp-article-content">
+                <div class="mp-article-content-head"></div>
+                <div class="mp-article-content-area">
+                    <div class="mp-article-caption">
+                        <div class="mp-article-caption-wrap">
+                            <div class="mp-article-caption-pure">
+                                <h2 class="mp-article-caption-title">
+                                    <em class="mp-article-caption-title-word" style="color: rgb(104, 49, 0);">
+                                        {{userInformation.title}}
+                                    </em></h2>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mp-article-music" v-if="musicName">
+
+                        <audio src="" id="media" width="1" height="1" preload></audio>
+
+                        <div class="mp-article-music-static" id="play-pause-button"
+                             style="background-color: rgba(104, 49, 0, 0.1);">
+                            <div class="mp-article-music-static-hand">
+                                <i class="mp-article-music-static-play"
+                                   style="color: rgb(174, 118, 68);"></i>
+                            </div>
+                            <div class="mp-article-music-static-title">
+                                <span class="mp-article-music-static-music-name"
+                                      style="color: rgb(174, 118, 68);">{{musicInformation.music_title}}</span>
+                            </div>
+                        </div>
+                        <div  class="mp-article-music-migu-fixed" @click="broadcast">
+                            <div  class="mp-article-music-fixed-icon"
+                                  style="font-size: 32px; height: 32px; width: 32px; background-color: rgba(104, 49, 0, 0.6);">
+                                <i  class="iconfont icon-music"
+                                    style="color: rgb(244, 230, 201);"></i></div>
+                        </div>
+                    </div>
+                    <div :class="{hidden:isHidden}" class="aaa">
+                        <!--align  图片上文字下-->
+                        <div v-if="userInformation.align == 1">
+                            <div v-if="contentList.length > 0" v-for="(item,index) in contentList ">
+                                <div class="mp-article-images">
+                                    <div class="mp-article-images-border">
+                                        <div class="mp-article-images-item"
+                                             style="  background-color: rgba(255, 255, 255, 0);">
+                                            <div class="mp-article-images-item-mask" style="opacity: 0;"></div>
+                                            <img class="mp-article-images-item-img"
+                                                 :src="item.image"
+                                                 style="border-color: rgb(255, 255, 255); "></div>
+
+                                    </div>
+                                </div>
+                                <div class="mp-article-texts" style="color: rgb(104, 49, 0);">
+                                    <div class="mp-article-texts-word">
+                                        <span>{{item.html}}</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <!--align  图片下文字上-->
+                        <div v-if="userInformation.align == 2">
+                            <div v-if="contentList.length > 0" v-for="(item,index) in contentList ">
+
+                                <div class="mp-article-texts" style="color: rgb(104, 49, 0);">
+                                    <div class="mp-article-texts-word">
+                                        <span>{{item.html}}</span>
+                                    </div>
+                                </div>
+
+                                <div class="mp-article-images">
+                                    <div class="mp-article-images-border">
+                                        <div class="mp-article-images-item"
+                                             style="  background-color: rgba(255, 255, 255, 0);">
+                                            <div class="mp-article-images-item-mask" style="opacity: 0;"></div>
+                                            <img class="mp-article-images-item-img"
+                                                 :src="item.image"
+                                                 style="border-color: rgb(255, 255, 255); "></div>
+
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+
+
+                </div>
+                <div class="mp-article-content-more" v-if="contentList.length >2">
+                    <div class="mp-article-content-more-wrap"
+                         v-if="isHidden"
+                         @click="loadMore"><em class="mp-article-content-more-text">展开阅读全文</em> <i
+                            class="mp-article-content-more-icon iconfont icon-arrow"></i></div>
+                </div>
+            </div>
+            <div class="print-button"></div>
+        </div>
+    </div>
+
+
+</div>
+
+
+</body>
+<script type="text/javascript" src="js/jquery.min.js"></script>
+<script type="text/javascript" src="js/vue.min.js"></script>
+<script type="text/javascript" src="js/music.js"></script>
+<script type="text/javascript" src="js/preview_page.js"></script>
+<script type="text/javascript" src="js/snowflake.js"></script>
+</html>

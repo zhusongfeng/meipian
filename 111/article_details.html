@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>评论详情</title>
+    <link rel="stylesheet" href="css/icon.css">
+    <link rel="stylesheet" href="css/normalize.css">
+    <link rel="stylesheet" href="css/article_details.css">
+    <link rel="stylesheet" href="css/load.css">
+    <script type="text/javascript" src="js/rem.js"></script>
+    <style>
+        .mp-article-music-migu-fixed {
+            display: none;
+        }
+        .article {  background: radial-gradient(#eeeeee, #444444) ;  }
+        .mp-article-images-item-img, .mp-article-images-item {
+            height: 7.44rem;
+            width: 6.3rem;
+            background-size: cover;
+        }
+        .mp-article-texts-word span p img{
+            height: 7.44rem;
+            width: 100%;
+            background-size: cover;
+        }
+        .group{margin-top: 0; margin-bottom: 0;}
+        .hidden{
+            max-height: 700px;
+            overflow:hidden;
+        }
+        .mp-follow{
+            float: right;
+            display: inline-block;
+            width: 1.2rem;
+            height: 0.58rem;
+            line-height: 0.58rem;
+            text-align: center;
+            background-color: rgba(104, 144, 169, 0.1);
+            color: rgb(104, 144, 169);
+            font-size: 0.28rem;
+            border-radius: 1rem;
+        }
+    </style>
+</head>
+<body>
+
+<div id="app" v-clock  class="mp-frame mp-article"   :class="{article:loader}">
+    <!--加载中-->
+    <div class="loader" v-if="loader">
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+    <!--左右两侧背景图-->
+    <div class="mp-article-bgfixed repeat"></div>
+    <!--头部-->
+    <div class="mp-article-head"></div>
+    <div v-if="dataType == 1">
+        <!--内容区域-->
+        <div class="mp-article-tpl" style="min-height: 667px;">
+            <div class="mp-article-content-container">
+                <div class="mp-article-content">
+                    <div class="mp-article-content-head"></div>
+                    <div class="mp-article-content-area">
+                        <div class="mp-article-caption">
+                            <div class="mp-article-caption-wrap">
+                                <div class="mp-article-caption-pure">
+                                    <h2 class="mp-article-caption-title">
+                                        <em class="mp-article-caption-title-word" style="color: rgb(104, 49, 0);">
+                                            {{userInformation.title}}
+                                        </em></h2>
+                                    <div class="mp-article-caption-subhead">
+                                        <div class="mp-article-caption-subhead-author" style="color: rgb(104, 144, 169);">
+                                            {{userInformation.article_user.nickname}}
+                                        </div>
+                                        <div class="mp-article-caption-subhead-info">
+                                            <span class="mp-article-caption-subhead-time" style="color: rgb(174, 118, 68);">2018-09-17</span>
+                                            <span class="mp-article-caption-subhead-count" style="color: rgb(174, 118, 68);"><span>阅读</span>
+                                                <span>{{userInformation.hits}}</span></span>
+                                            <span class="mp-follow">关注</span>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mp-article-music" v-if="musicInformation.music">
+                            <audio src="" id="media" width="1" height="1" preload></audio>
+
+                            <div class="mp-article-music-static" 
+                                 style="background-color: rgba(104, 49, 0, 0.1);">
+                                <div class="mp-article-music-static-hand">
+                                    <i class="mp-article-music-static-play"
+                                       style="color: rgb(174, 118, 68);"></i>
+                                </div>
+                                <div class="mp-article-music-static-title">
+                                <span class="mp-article-music-static-music-name"
+                                      style="color: rgb(174, 118, 68);">{{musicInformation.music_title}}</span>
+                                </div>
+                            </div>
+                            <div  class="mp-article-music-migu-fixed" @click="broadcast">
+                                <div  class="mp-article-music-fixed-icon"
+                                      style="font-size: 32px; height: 32px; width: 32px; background-color: rgba(104, 49, 0, 0.6);">
+                                    <i  class="iconfont icon-music"
+                                        style="color: rgb(244, 230, 201);"></i></div>
+                            </div>
+                        </div>
+                        <div :class="{hidden:isHidden}">
+                            <!--内容部分 align == 1,图片在上面文字在下面-->
+
+                            <div v-if="userInformation.align == 1"
+                                 v-for="(item,index) in articleContent">
+                                <div class="mp-article-images">
+                                    <div class="mp-article-images-border">
+                                        <div class="mp-article-images-item"
+                                             style="  background-color: rgba(255, 255, 255, 0);">
+                                            <div class="mp-article-images-item-mask" style="opacity: 0;"></div>
+                                            <img class="mp-article-images-item-img"
+                                                 :src="item.image"
+                                                 style="border-color: rgb(255, 255, 255); "></div>
+
+                                    </div>
+                                </div>
+                                <div class="mp-article-texts" style="color: rgb(104, 49, 0);">
+                                    <div class="mp-article-texts-word">
+                            <span v-html="item.html">
+
+                            </span></div>
+                                </div>
+                            </div>
+
+                            <!--内容部分 align == 2,文字在上面图片在下面-->
+                            <div v-if="userInformation.align == 2"
+                                 v-for="(item,index) in articleContent">
+                                <div class="mp-article-texts" style="color: rgb(104, 49, 0);">
+                                    <div class="mp-article-texts-word">
+                            <span v-html="item.html">
+                            </span>
+                                    </div>
+                                </div>
+                                <div class="mp-article-images">
+                                    <div class="mp-article-images-border">
+                                        <div class="mp-article-images-item" style="  ">
+                                            <div class="mp-article-images-item-mask"></div>
+                                            <img class="mp-article-images-item-img"
+                                                 :src="item.image"
+                                                 style="border-color: rgb(255, 255, 255);   "></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="mp-article-content-more" style="color: rgb(104, 144, 169);" v-if="articleContent.length >2">
+                        <div class="mp-article-content-more-wrap"
+                             v-if="isHidden"
+                             @click="loadMore"><em class="mp-article-content-more-text">展开阅读全文</em> <i
+                                class="mp-article-content-more-icon iconfont icon-arrow"></i></div>
+                    </div>
+                </div>
+                <div class="print-button"></div>
+            </div>
+        </div>
+        <!--评论和推荐区域-->
+        <div class="mp-article-main">
+            <div class="mp-report">
+                <div class="mp-report-wrap">
+                    <div class="mp-report-read" style="color: rgb(174, 118, 68);">
+                        <em class="mp-report-read-title">阅读</em>
+                        <span class="mp-report-read-count">{{userInformation.hits}}</span></div>
+                    <a class="mp-report-link" style="color: rgb(104, 49, 0);">投诉文章</a></div>
+            </div>
+            <div class="mp-author-link" v-if="dataType == 1"
+                 style="border-top: 8px solid rgba(104, 49, 0, 0.1); border-bottom: 8px solid rgba(104, 49, 0, 0.1);">
+                <div class="mp-author-link-wrap">
+                    <div class="mp-author-link-head">
+                        <img :src="userInformation.article_user.avatar" class="mp-author-link-head-img">
+                    </div>
+                    <div class="mp-author-link-hand">
+                    <span class="mp-author-link-hand-btn"
+                          style="background-color: rgba(104, 144, 169, 0.1); color: rgb(104, 144, 169);">关注</span>
+                    </div>
+                    <div class="mp-author-link-cont"><span class="mp-author-link-cap" style="color: rgb(104, 49, 0);">
+                   {{userInformation.article_user.nickname}}
+                </span>
+                        <div class="mp-author-link-desc"><span style="color: rgb(174, 118, 68);">{{userInformation.article_user.autograph}}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="mp-comment">
+                <div class="mp-comment-wrap">
+                    <div class="mp-comment-qrcode-banner"></div>
+                    <div class="mp-comment-head"><span class="mp-comment-caption" style="color: rgb(104, 49, 0);"><em
+                            class="mp-comment-caption-txt">热门评论</em></span>
+                        <div class="mp-comment-editor" style="color: rgb(104, 49, 0);"><i
+                                class="mp-comment-editor-icon iconfont icon-tianjiapinglun"></i> <em
+                                class="mp-comment-editor-txt">评论</em></div>
+                    </div>
+                    <!--<div class="mp-comment-area">
+                        <div class="mp-comment-loading"><img src="image/133.gif"></div>
+                    </div>-->
+                    <div class="mp-comment-area">
+                        <ul class="mp-comment-list" >
+                            <li class="mp-comment-list-item" v-if="commentList.length > 0"
+                                v-for="(item,index) in commentList">
+                                <div class="mp-comment-list-line" style="border-color: rgba(104, 49, 0, 0.1);"></div><!---->
+                                <div class="mp-comment-list-view">
+                                    <img :src="item.user.avatar" class="mp-comment-list-view-img"> <!----></div>
+                                <div class="mp-comment-list-area">
+                                    <div class="mp-comment-list-head">
+                                        <div class="mp-comment-list-user" style="color: rgb(104, 144, 169);"><em
+                                                class="mp-comment-list-user-txt">{{item.user.nickname}}</em></div>
+                                        <div class="mp-comment-list-thumbs" style="color: rgb(104, 49, 0);"><i
+                                                class="mp-comment-list-thumbs-icon iconfont  icon-zan"></i>
+                                            <span class="mp-comment-list-thumbs-txt">{{item.zan_num }}</span>
+                                        </div>
+                                    </div>
+                                    <div class="mp-comment-list-word">
+                                        <div class="mp-comment-list-word-detail">
+                                            <div class="mp-comment-list-word-detail-cont" style="color: rgb(104, 49, 0);">
+                                                {{item.content}}
+                                            </div>
+                                        </div>
+                                        <div class="mp-comment-list-word-hand" style="color: rgb(104, 144, 169);">全文</div>
+                                    </div> <!---->
+                                    <div class="mp-comment-list-date">
+                                        <div class="mp-comment-list-date-txt" style="color: rgb(174, 118, 68);"><span
+                                                class="mp-comment-list-date-time">{{item.created}}</span>
+                                            <!--<span class="mp-comment-list-date-report">投诉</span>-->
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+
+                            <li class="mp-comment-list-item" v-if="!commentList.length">
+                                <!--分割线-->
+                                <div class="mp-comment-list-line" style="border-color: rgba(104, 49, 0, 0.1);"></div>
+                                <div class="mp-comment-list-area">
+
+                                    <div class="mp-comment-list-word">
+                                        <div class="mp-comment-list-word-detail">
+                                            <div class="mp-comment-list-word-detail-cont"
+                                                 style="color: rgb(104, 49, 0);text-align: center;">
+                                               暂无评论数据！
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+
+                </div>
+            </div>
+            <div class="mp-recommend">
+                <div class="mp-recommend-wrap"><span class="mp-recommend-caption" style="color: rgb(104, 49, 0);">
+                <span>热门推荐</span></span>
+                    <div class="mp-recommend-cont">
+
+                        <ul class="mp-recommend-list"><!---->
+                            <li class="mp-recommend-list-item"
+                                v-for="(item,index) in articleList"
+                                v-if="articleList.length > 0">
+                                <a class="mp-recommend-list-link">
+                                    <div class="mp-recommend-list-view">
+                                        <img class="mp-recommend-list-img"
+                                             :src="item.images[0]"
+                                             lazy="loaded" style="height: 100%; width: auto;">
+                                    </div>
+                                    <div class="mp-recommend-list-cont">
+                                        <h4 class="mp-recommend-list-title" style="color: rgb(104, 49, 0);">
+                                            <span>{{item.title}}</span>
+                                        </h4>
+                                        <div class="mp-recommend-list-desc" style="color: rgb(174, 118, 68);">
+                                            <span class="mp-recommend-list-read">阅读</span>
+                                            <span class="mp-recommend-list-count">{{item.hits}}</span>
+                                        </div>
+                                    </div>
+                                </a>
+                            </li>
+
+                            <!--暂无推荐数据！-->
+                            <li class="mp-recommend-list-item" v-if="!articleList.length">
+                                <a class="mp-recommend-list-link">
+
+                                    <div class="mp-recommend-list-cont">
+                                        <h4 class="mp-recommend-list-title"
+                                            style="color: rgb(104, 49, 0); text-align: center;">
+                                            <span>暂无推荐文章！</span>
+                                        </h4>
+                                    </div>
+                                </a>
+                            </li>
+
+                        </ul>
+                        <!--<div class="mp-recommend-loading">
+                            <img src="image/133.gif">
+                        </div>-->
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+
+
+    <div v-if="dataType == 3 ||dataType == 2 ">
+        <!--内容区域-->
+        <div class="mp-article-tpl" style="min-height: 667px;">
+            <div class="mp-article-content-container">
+                <div class="mp-article-content">
+                    <div class="mp-article-content-head"></div>
+                    <div class="mp-article-content-area">
+                        <div class="mp-article-caption">
+                            <div class="mp-article-caption-wrap">
+                                <div class="mp-article-caption-pure">
+                                    <h2 class="mp-article-caption-title">
+                                        <em class="mp-article-caption-title-word" style="color: rgb(104, 49, 0);">
+                                            {{userInformation.title}}
+                                        </em></h2>
+                                    <div class="mp-article-caption-subhead">
+                                        <div class="mp-article-caption-subhead-info">
+                                            <span class="mp-article-caption-subhead-time"
+                                                  style="color: rgb(174, 118, 68);">{{userInformation.created_at}}
+                                            </span>
+                                            <span class="mp-article-caption-subhead-count"
+                                                  style="color: rgb(174, 118, 68);">
+                                                <span>阅读</span><span>{{userInformation.hits}}</span>
+                                            </span>
+                                            <span class="mp-follow">
+                                                关注
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mp-article-music"  v-if="userInformation.music">
+
+                            <audio src=""  width="1" height="1" preload></audio>
+
+                            <div class="mp-article-music-static" 
+                                 style="background-color: rgba(104, 49, 0, 0.1);">
+                                <div class="mp-article-music-static-hand">
+                                    <i class="mp-article-music-static-play"
+                                       style="color: rgb(174, 118, 68);"></i>
+                                </div>
+                                <div class="mp-article-music-static-title">
+                                <span class="mp-article-music-static-music-name"
+                                      style="color: rgb(174, 118, 68);">{{userInformation.music_title}}</span>
+                                </div>
+                            </div>
+                            <div  class="mp-article-music-migu-fixed" >
+                                <div  class="mp-article-music-fixed-icon"
+                                      style="font-size: 32px; height: 32px; width: 32px; background-color: rgba(104, 49, 0, 0.6);">
+                                    <i  class="iconfont icon-music"
+                                        style="color: rgb(244, 230, 201);"></i></div>
+                            </div>
+                        </div>
+                        <div class="mp-article-texts group"  :class="{hidden:isHidden}">
+                            <div class="mp-article-texts-word">
+                            <span v-html="userInformation.content">
+
+                            </span></div>
+                        </div>
+                    </div>
+                    <div class="mp-article-content-more" style="color: rgb(104, 144, 169);">
+                        <div class="mp-article-content-more-wrap"
+                             v-if="isHidden" @click="loadMore"
+                        >
+                            <em class="mp-article-content-more-text">展开阅读全文</em>
+                            <i class="mp-article-content-more-icon iconfont icon-arrow"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="print-button"></div>
+            </div>
+        </div>
+        <!--评论和推荐区域-->
+        <div class="mp-article-main">
+            <div class="mp-report">
+                <div class="mp-report-wrap">
+                    <div class="mp-report-read" style="color: rgb(174, 118, 68);">
+                        <em class="mp-report-read-title">阅读</em>
+                        <span class="mp-report-read-count">{{userInformation.hits}}</span></div>
+                    <a class="mp-report-link" style="color: rgb(104, 49, 0);">投诉文章</a></div>
+            </div>
+
+            <div class="mp-comment">
+                <div class="mp-comment-wrap">
+                    <div class="mp-comment-qrcode-banner"></div>
+                    <div class="mp-comment-head"><span class="mp-comment-caption" style="color: rgb(104, 49, 0);"><em
+                            class="mp-comment-caption-txt">热门评论</em></span>
+                        <div class="mp-comment-editor" style="color: rgb(104, 49, 0);"><i
+                                class="mp-comment-editor-icon iconfont icon-tianjiapinglun"></i> <em
+                                class="mp-comment-editor-txt">评论</em></div>
+                    </div>
+                    <!--<div class="mp-comment-area">
+                        <div class="mp-comment-loading"><img src="image/133.gif"></div>
+                    </div>-->
+                    <div class="mp-comment-area">
+                        <ul class="mp-comment-list">
+                            <li class="mp-comment-list-item"
+                                v-if="commentList.length > 0"
+                                v-for="(item,index) in commentList"
+                            >
+                                <div class="mp-comment-list-line" style="border-color: rgba(104, 49, 0, 0.1);"></div><!---->
+                                <div class="mp-comment-list-view">
+                                    <img :src="item.user.avatar"
+                                        class="mp-comment-list-view-img"> <!----></div>
+                                <div class="mp-comment-list-area">
+                                    <div class="mp-comment-list-head">
+                                        <div class="mp-comment-list-user" style="color: rgb(104, 144, 169);"><em
+                                                class="mp-comment-list-user-txt">{{item.user.nickname}}</em></div>
+                                        <div class="mp-comment-list-thumbs" style="color: rgb(104, 49, 0);"><i
+                                                class="mp-comment-list-thumbs-icon iconfont  icon-zan"></i> <span
+                                                class="mp-comment-list-thumbs-txt">
+                   {{item.zan_num }}
+                  </span></div>
+                                    </div>
+                                    <div class="mp-comment-list-word">
+                                        <div class="mp-comment-list-word-detail">
+                                            <div class="mp-comment-list-word-detail-cont" style="color: rgb(104, 49, 0);">
+                                                {{item.content}}
+                                            </div>
+                                        </div>
+                                        <div class="mp-comment-list-word-hand" style="color: rgb(104, 144, 169);">全文</div>
+                                    </div> <!---->
+                                    <div class="mp-comment-list-date">
+                                        <div class="mp-comment-list-date-txt" style="color: rgb(174, 118, 68);"><span
+                                                class="mp-comment-list-date-time">{{item.created}}</span> </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="mp-comment-list-item" v-if="!commentList.length">
+                                <div class="mp-comment-list-line" style="border-color: rgba(104, 49, 0, 0.1);"></div>
+                                <div class="mp-comment-list-area">
+                                    <div class="mp-comment-list-word">
+                                        <div class="mp-comment-list-word-detail">
+                                            <div class="mp-comment-list-word-detail-cont" style="color: rgb(104, 49, 0);text-align: center;">
+                                                暂无评论数据！
+                                            </div>
+                                        </div>
+
+                                    </div> <!---->
+
+                                </div>
+                            </li>
+
+                        </ul>
+                    </div>
+
+                </div>
+            </div>
+            <div class="mp-recommend">
+                <div class="mp-recommend-wrap"><span class="mp-recommend-caption" style="color: rgb(104, 49, 0);">
+                <span>热门推荐</span></span>
+                    <div class="mp-recommend-cont">
+
+                        <ul class="mp-recommend-list">
+                            <li class="mp-recommend-list-item"
+                                v-if="articleList.length > 0" v-for="(item,index) in articleList">
+                                <a class="mp-recommend-list-link">
+                                    <div class="mp-recommend-list-view">
+                                        <img class="mp-recommend-list-img"
+                                             :src="item.images">
+                                    </div>
+                                    <div class="mp-recommend-list-cont">
+                                        <h4 class="mp-recommend-list-title" style="color: rgb(104, 49, 0);">
+                                            <span>{{item.title}}</span>
+                                        </h4>
+                                        <div class="mp-recommend-list-desc" style="color: rgb(174, 118, 68);">
+                                            <span class="mp-recommend-list-read">阅读</span>
+                                            <span class="mp-recommend-list-count">{{item.hits}}</span>
+                                        </div>
+                                    </div>
+                                </a>
+                            </li>
+                            <li class="mp-recommend-list-item" v-if="!articleList.length">
+                                <a class="mp-recommend-list-link">
+                                    <div class="mp-recommend-list-view">
+                                        <img class="mp-recommend-list-img"
+                                             src="image/11.jpg">
+                                    </div>
+                                    <div class="mp-recommend-list-cont">
+                                        <h4 class="mp-recommend-list-title"
+                                            style="color: rgb(104, 49, 0);">
+                                        <span>医院宣布死亡，实习医生几针救活，
+                                            .</span>
+                                        </h4>
+                                        <div class="mp-recommend-list-desc" style="color: rgb(174, 118, 68);">
+                                            <span class="mp-recommend-list-read">阅读</span>
+                                            <span class="mp-recommend-list-count">183649</span>
+                                        </div>
+                                    </div>
+                                </a>
+                            </li>
+
+
+                        </ul>
+                       <!-- <div class="mp-recommend-loading">
+                            <img src="image/133.gif">
+                        </div>-->
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+
+    </div>
+</div>
+
+
+</body>
+<script type="text/javascript" src="js/jquery.min.js"></script>
+<script type="text/javascript" src="js/vue.min.js"></script>
+<script type="text/javascript" src="js/article_details.js"></script>
+
+</html>

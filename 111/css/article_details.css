@@ -1,8 +1,7 @@
 
-.mp-article .mp-article-bgfixed {
-    /*background-image: url(//ss2.meipian.me/cdn/article/app/tpl-basis/img/mp-article-bg-fixed.1f26c2e.png)*/
-}
-
+/*.mp-article .mp-article-bgfixed {
+    background-image: url("../image/1/bg.jpg") ;
+}*/
 
 .mp-article .mp-article-images .mp-article-images-border {
     /*border-image-source: url('../image/bg.png')*/
@@ -112,7 +111,7 @@
 
 .mp-article-content .mp-article-content-more {
     margin: 0 auto;
-    height: 1.78rem;
+    height: 1rem;
     text-align: center
 }
 
@@ -344,7 +343,8 @@
 .mp-article-caption .mp-article-caption-subhead-info {
     display: inline-block;
     vertical-align: top;
-    margin-right: .07rem
+    margin-right: .07rem;
+    width: 76%;
 }
 
 .mp-article-caption .mp-article-caption-subhead-time {
@@ -1611,7 +1611,10 @@
     position: absolute;
     top: 0;
     left: 0;
-    width: 100%;
+    width: 2rem;
+    height:1.6rem;
+    background-size: cover;
+    display: inline-block;
     right: 0;
     bottom: 0
 }
@@ -1627,6 +1630,7 @@
     padding: 0;
     font-weight: 400;
     height: .92rem;
+    line-height: 0.46rem;
     font-size: 0;
 }
 
@@ -1720,89 +1724,77 @@
 
 
 
-
-
-
-
-
-
-
-.mp-article-foot,.mp-article-foots{
+#container {
     position: fixed;
-    left: 0;
-    bottom: 0;
     width: 100%;
-    height: 1rem;
-    z-index: 2;
-    display: flex;
-    margin-top: 60px;
-    background-color: #fff;
+    height: 100%;
+    display: block;
+    z-index: -100;
+    overflow: auto;
+    overflow-x: hidden;
+  /*  background: url("../image/1/bg.jpg") no-repeat;*/
+    background-size: cover;
 }
-.comment-input-container{
-    width: 50%;
-    color: #333;
-    margin: 0.15rem auto 0;
-    float: left;
-}
-.comment-input ,.comment{
-    text-indent: 0.25rem;
-    margin-left: 0.25rem;
-    width: 98%;
-    border-radius: 20px;
-    height: 0.7rem;
-    line-height: 0.7rem;
-    font-size: 0.16rem;
-    color: #999999;
-    background: rgb(246,246,249);
-    border: none;
-}
-.comment-input:focus,.comment:focus{
-    border: none !important;
-    outline: none !important;
-}
-.comment-icon-container{
-    width: 50%;
-    float: left;
-    display: flex;
-}
-.comment-list{
-    flex: 1;
-    text-align: center;
-    height: 0.5rem;
-    position: relative;
-
-}
-.mp-article-foots{
-    display: none;
-}
-.comment{
-    margin-top: 0.15rem;
-}
-.comment-list-icon{
+#leafContainer {
     position: absolute;
-    top: 0.2rem;
-    left: 40%;
-    font-size: 0.35rem;
-    color: #000000;
-}
-.comment-list-txt{
-    display: inline-block;
-    margin-top: 0.6rem;
-    text-align: center;
-    font-size: 0.28rem;
-    color: #000000;
-}
-.input-container{
-    width: 80%;
-    display: inline-block;
+    width: 100%;
+    height: 100%;
 }
 
-.input-send{
-    display: inline-block;
-    width: 19%;
-    height: 1rem;
-    line-height: 1rem;
-    text-align: center;
-    font-size: 0.3rem;
-    color: #333333;
+#leafContainer > div {
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    -webkit-animation-iteration-count: infinite, infinite;
+    -webkit-animation-direction: normal, normal;
+    -webkit-animation-timing-function: linear, ease-in;
+}
+#leafContainer > div > img {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    width: 30px;
+    height: 30px;
+    max-width: 100%;
+    max-height: 100%;
+    z-index:9999;
+    -webkit-animation-iteration-count: infinite;
+    -webkit-animation-direction: alternate;
+    -webkit-animation-timing-function: ease-in-out;
+    -webkit-transform-origin: 50% -100%;
+}
+@-webkit-keyframes fade {
+    0% {
+        opacity: 1;
+    }
+    95% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
+}
+@-webkit-keyframes drop {
+    0% {
+        -webkit-transform: translate(0px, -50px);
+    }
+    100% {
+        -webkit-transform: translate(0px, 650px);
+    }
+}
+@-webkit-keyframes clockwiseSpin {
+    0% {
+        -webkit-transform: rotate(-50deg);
+    }
+    100% {
+        -webkit-transform: rotate(50deg);
+    }
+}
+@-webkit-keyframes counterclockwiseSpinAndFlip {
+    0% {
+        -webkit-transform: scale(-1, 1) rotate(50deg);
+    }
+    100% {
+        -webkit-transform: scale(-1, 1) rotate(-50deg);
+    }
 }

@@ -1,5 +1,6 @@
 $(function() {
-    var playerTrack = $("#player-track"),  playPauseButton = $("#play-pause-button"),    curMinutes, curSeconds, durMinutes, durSeconds, playProgress, bTime, nTime = 0,  tFlag = false,  albumArtworks = ['_1'], trackUrl = ['mp3/1.mp3','mp3/2.mp3'],  currIndex = -1;
+
+    var playerTrack = $("#player-track"),  playPauseButton = $(".mp-article-music-static"),    curMinutes, curSeconds, durMinutes, durSeconds, playProgress, bTime, nTime = 0,  tFlag = false,  albumArtworks = ['_1'], trackUrl = ['mp3/1.mp3'],  currIndex = -1;
     //播放音乐
     function playPause() {
         $('.mp-article-music-static-hand i').addClass('mp-article-music-static-pause').removeClass('mp-article-music-static-play');
@@ -42,9 +43,5 @@ $(function() {
         playPauseButton.on('click',playPause);
     }
     initPlayer();
-    /*$(document).ready(function () {
-        setTimeout(function () {
-            audio.play();
-        },1000 )
-    })*/
+
 });
